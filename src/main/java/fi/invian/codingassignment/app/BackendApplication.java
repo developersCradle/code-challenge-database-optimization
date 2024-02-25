@@ -18,8 +18,10 @@ public class BackendApplication {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
         context.setContextPath("/*");
         ServletContainer jersey = new ServletContainer(new ResourceConfig() {{
-            packages("fi.invian.codingassignment.rest");
+        	register(new MyApplicationBinder());
+        	packages("fi.invian.codingassignment.rest");
         }});
+        
         ServletHolder holder = new ServletHolder(jersey);
         context.addServlet(holder, "/*");
         server.setHandler(context);
@@ -32,6 +34,8 @@ public class BackendApplication {
                 // ignored
             }
         }));
+        
         server.start();
+    
     }
 }
