@@ -1,28 +1,33 @@
 
--- Write your CREATE TABLE statements here and optionally your INSERT statements if you want static test data
--- CREATE TABLE example_table (
---    hello_message TEXT NOT NULL
--- );
+-- Version 2
 
--- Version 1
+-- Models Users
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     name TEXT NOT NULL
 );
 
+-- Models Messages
 CREATE TABLE Messages (
     message_id INT AUTO_INCREMENT PRIMARY KEY,
     title TEXT NOT NULL,
     body TEXT NOT NULL,
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     sender_id INT,
-    FOREIGN KEY (sender_id) REFERENCES Users(user_id),
+    FOREIGN KEY (sender_id) REFERENCES Users(user_id)
 );
 
+-- Models Recipients of sent messages
+CREATE TABLE Recipients (
+    message_id INT,
+    receiver_id INT,
+    PRIMARY KEY (message_id, receiver_id),
+    FOREIGN KEY (message_id) REFERENCES Messages(message_id),
+    FOREIGN KEY (receiver_id) REFERENCES Users(user_id)
+);
 
--- We read query users, so we are going to index it for now. Users table are not frequantly manipulated, so its even better
--- CREATE INDEX idx_user_id ON Users(user_id);
--- CREATE INDEX idx_user_name ON Users(name);
+-- We read query Recipients for calculations, so we index it for now.
+CREATE INDEX idx_receiver_id ON Recipients(receiver_id);
 
 INSERT INTO Users SET name = 'Some random name 1';
 INSERT INTO Users SET name = 'Some random name 2';
