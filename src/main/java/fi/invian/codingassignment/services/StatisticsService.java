@@ -3,9 +3,9 @@ package fi.invian.codingassignment.services;
 import java.sql.SQLException;
 import java.util.List;
 
-import fi.invian.codingassignment.pojos.UserPojo;
+import javax.ws.rs.core.Response;
+
 
 public interface StatisticsService {
-	List<UserPojo> getTopTenUsers() throws SQLException;
-
+	Response getTopUsersWithMessageCount(int numberOfUsers, int daysAgo, String sort) throws SQLException;
 }

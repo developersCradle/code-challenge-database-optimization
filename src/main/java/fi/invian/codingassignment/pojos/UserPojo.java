@@ -1,15 +1,22 @@
 package fi.invian.codingassignment.pojos;
 
 public class UserPojo {
+	
     private int userPojoId;
     private String name;
 
+  
     public UserPojo() {
     }
 
     public UserPojo(String name) {
         this.name = name;
     }
+
+    public UserPojo(int userPojoId, String name) {
+ 		this.userPojoId = userPojoId;
+ 		this.name = name;
+ 	}
 
     public int getUserId() {
         return userPojoId;
