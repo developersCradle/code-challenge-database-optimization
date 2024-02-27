@@ -1,6 +1,7 @@
 package fi.invian.codingassignment.pojos;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class MessagePojo {
         
@@ -9,8 +10,10 @@ public class MessagePojo {
         private String body;
         private Timestamp sentAt;
         private int senderId;
+        private List<Integer> receiverIds; 
 
-        public MessagePojo() {
+    
+		public MessagePojo() {
         }
 
         public MessagePojo(String title, String body, int senderId) {
@@ -60,6 +63,14 @@ public class MessagePojo {
             this.senderId = senderId;
         }
         
+        public List<Integer> getReceiverIds() {
+    			return receiverIds;
+    		}
+
+    		public void setReceiverIds(List<Integer> receiverIds) {
+    			this.receiverIds = receiverIds;
+    		}
+
         @Override
      		public String toString() {
      			return "MessagePojo [messagePojoId=" + messagePojoId + ", title=" + title + ", body=" + body + ", sentAt="

@@ -1,3 +1,40 @@
+
+
+# MessageResource
+
+This resource is responsible for handling messages in the system.
+
+## Send New Message
+
+### Endpoint
+- **Path:** `/messages/send`
+- **HTTP Method:** POST
+- **Consumes:** `application/json`
+
+### Description
+Send a new message in the system.
+
+#### Request Body (JSON Example)
+```
+{
+  "senderId": 1,
+  "body": "Some Body",
+  "title": "Some Title",
+  "receiverIds": [1, 2, 3, 4, 5]
+}
+```
+#### Response
+> HTTP Status: 201 Created
+
+The message was sent successfully.
+> HTTP Status: 409 Conflict
+
+An issue occurred, and the record conflicts with the one in the database.
+
+The response will include appropriate status codes indicating the success or failure of the message sending operation
+
+<hr>
+
 # Requirements
 - Maven
 - Docker
