@@ -1,21 +1,88 @@
-
+- [ ] Add come caching
+- [ ] Test batteries, for heavy data operations
 
 # MessageResource
 
 This resource is responsible for handling messages in the system.
 
-## Send New Message
+# Read Messages for User
+
+This endpoint retrieves messages from the inbox of a specified user.
+
+### Endpoint
+
+`GET /messages/{userId}/inbox`
+
+### Parameters
+
+- **userId** (Path Parameter) - The unique identifier of the user.
+
+### Response
+
+> Success (HTTP Status: 200 OK)
+
+Returns a list of messages from the inbox of the user.
+
+#### Request Body (JSON Example)
+
+```json
+[
+  {
+    "title": "Message Title 1",
+    "body": "Message Body 1",
+    "sentAt": "2024-02-25T14:30:00",
+    "senderId": 2
+  },
+  {
+    "title": "Message Title 2",
+    "body": "Message Body 2",
+    "sentAt": "2024-02-26T10:15:00",
+    "senderId": 3
+  },
+  // ... other messages
+]
+```
+
+> Not Found (HTTP Status: 404 Not Found)
+
+Returns an error message when no messages are found for the specified user.
+
+```json
+
+{
+  "error": "No messages found for the user."
+}
+```
+
+> Internal Server Error (HTTP Status: 500 Internal Server Error)
+
+Returns an error message for any internal server error during message retrieval.
+
+```json
+
+{
+  "error": "Error retrieving messages for the user."
+}
+```
+
+### Example Usage
+
+```
+curl -X GET http://localhost:8080/messages/1/inbox
+```
+
+# Send New Message
+
+This endpoint sends a new message in the system.
 
 ### Endpoint
 - **Path:** `/messages/send`
 - **HTTP Method:** POST
 - **Consumes:** `application/json`
 
-### Description
-Send a new message in the system.
-
 #### Request Body (JSON Example)
-```
+
+```json
 {
   "senderId": 1,
   "body": "Some Body",
@@ -23,15 +90,48 @@ Send a new message in the system.
   "receiverIds": [1, 2, 3, 4, 5]
 }
 ```
+
 #### Response
+
 > HTTP Status: 201 Created
 
-The message was sent successfully.
+Returns a success message when the message is sent successfully.
+
+```json
+{
+  "message": "Created: The message was sent successfully."
+}
+
+```
+
 > HTTP Status: 409 Conflict
 
 An issue occurred, and the record conflicts with the one in the database.
 
-The response will include appropriate status codes indicating the success or failure of the message sending operation
+```json
+{
+  "error": "Conflict: The record conflicts with the one in the database."
+}
+
+```
+
+> Internal Server Error (HTTP Status: 500 Internal Server Error)
+
+Error message when there is a unique constraint violation or SQL error.
+
+```json
+{
+    "error": "Conflict: Unique constraint violation or SQL error."
+}
+
+```
+
+### Example Usage
+
+```
+curl -X POST -H "Content-Type: application/json" -d '{"senderId":1,"body":"Some Body","title":"Some Title","receiverIds":[1,2,3,4,5]}' http://localhost:8080/messages/send
+```
+
 
 <hr>
 

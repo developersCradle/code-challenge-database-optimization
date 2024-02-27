@@ -17,7 +17,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 	@Override
 	public Response getTopUsersWithMessageCount(int numberOfUsers, int daysAgo, String sort) throws SQLException {
 
-		System.out.println("Getting top" + numberOfUsers + "users. From " + daysAgo + "ago, with " + sort );
+		System.out.println("Getting top " + numberOfUsers + " users. From " + daysAgo + " ago, with " + sort );
 
 		String sql = "SELECT * FROM Users"; //This will change, return top 10 users
 
@@ -32,6 +32,11 @@ public class StatisticsServiceImpl implements StatisticsService {
 				users.add(user);
 			}
 
+			
+			if (users.isEmpty()) {
+				return Response.status(Response.Status.NOT_FOUND).entity("No top users were found.").build();
+			}
+			
 			return Response.ok(users).build();
 		}
 		catch (Exception e) {

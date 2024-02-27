@@ -5,8 +5,11 @@ import fi.invian.codingassignment.services.MessageService;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -38,26 +41,23 @@ public class MessageResource {
     	receaverIds.add(new Integer(5));
     	
     	message.setReceiverIds(receaverIds);
-    	
 //    	message.setSentAt(new Timestamp(System.currentTimeMillis())); Time should come from Db when inserted
     			
     	return messageService.sendNewMessage(message);
     }
     
-//    
-//
-//    @GET
-//    @Path("/{userId}/inbox")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public String readMessagesForUser(@PathParam("userId") String userId) {
-//    	
-//    	
-//    	
-//    	 String resultMessage = "Message sent successfully";
-//         return Response.ok(resultMessage, MediaType.TEXT_PLAIN).build();
-//           
-//    }
-//    
+    
+
+    @GET
+    @Path("/{userId}/inbox")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response readMessagesForUser(@PathParam("userId") String userId) throws SQLException {
+    	
+    	 
+    	return messageService.getMessagesForAdressedUser(1);
+           
+    }
+    
     
     
 }
