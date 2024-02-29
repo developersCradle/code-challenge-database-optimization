@@ -5,9 +5,9 @@
 
 This resource is responsible for handling messages in the system.
 
-# Read Messages for User
+# Get Messages for User Inbox
 
-This endpoint retrieves messages from the inbox of a specified user.
+This endpoint retrieves messages for a specified user's inbox.
 
 ### Endpoint
 
@@ -125,6 +125,10 @@ Error message when there is a unique constraint violation or SQL error.
 }
 
 ```
+
+### Notes
+
+Rollbacks are employed in case of errors to ensure that the database remains in a consistent state.
 
 ### Example Usage
 

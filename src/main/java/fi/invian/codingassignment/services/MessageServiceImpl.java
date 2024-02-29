@@ -20,10 +20,14 @@ public class MessageServiceImpl implements MessageService {
 
 		System.out.println("Sending new message " + message);
 
-		try (Connection connection = DatabaseConnection.getConnection()) {
+		Connection connection = null;
 
+		try {
+			
+			connection = DatabaseConnection.getConnection();
+			connection.setAutoCommit(false); // auto-commit flase, ready for transaction.
+			
 			String sqlForMessagesTable = "INSERT INTO Messages (title, body, sender_id) VALUES (?, ?, ?)"; // For
-
 			PreparedStatement preparedStatementForMessages = connection.prepareStatement(sqlForMessagesTable,
 					Statement.RETURN_GENERATED_KEYS); // We want to use RETURN_GENERATED_KEYS. Inserted id will return
 														// from
@@ -34,14 +38,13 @@ public class MessageServiceImpl implements MessageService {
 			preparedStatementForMessages.setInt(3, message.getSenderId());
 
 			int rowsAffectedFromMessagesTable = preparedStatementForMessages.executeUpdate();
-
 			if (rowsAffectedFromMessagesTable > 0) { // Insert was successful
 
 				ResultSet generatedKeys = preparedStatementForMessages.getGeneratedKeys();
 
 				if (generatedKeys.next()) {
 					int message_id = generatedKeys.getInt(1); // For follow up query. Only first one is
-																// important
+																// important. TODO MINOR: If rollbacks has been happened, db id is still counting it for next id. 
 
 					for (Integer receaver_id : message.getReceiverIds()) {
 
@@ -58,27 +61,46 @@ public class MessageServiceImpl implements MessageService {
 						System.out.println("Insert was successful " + executeUpdate);
 					}
 				} else {
+					
 					// GeneratedKeys not supported by database.
 					// Other logic to get inserted Message row id from db
-					// Rollback here or something. TODO
+					// For now rollback
+					
+					connection.rollback();
 					throw new SQLException("No generated keys received. Abort Actions");
 
 				}
 
+				connection.commit();
 				System.out.println("Message created");
-				return Response.status(Response.Status.CREATED).entity("Created: The message was sent successfully.").build();
-			} else {
 
+				return Response.status(Response.Status.CREATED).entity("Created: The message was sent successfully.")
+						.build();
+			} else {
+				
+				connection.rollback();
 				return Response.status(Response.Status.CONFLICT)
 						.entity("Conflict: The record conflicting with record on database").build();
 			}
 		} catch (SQLException e) {
+			//Something unexpected happened inside db logic
 			e.printStackTrace();
-
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 					.entity("Conflict: Unique constraint violation or SQL error").build();
+
+		} finally { //For closing connection and resetting auto-commit
+				if (connection != null) {
+					try {
+						connection.setAutoCommit(true); // Reset auto-commit
+						connection.close();
+					} catch (SQLException e) {
+						//Error while closing connection
+						e.printStackTrace();
+					}
+				}
+				
+			}
 		}
-	}
 
 	@Override
 	public Response getMessagesForAdressedUser(int userId) throws SQLException {
@@ -104,9 +126,9 @@ public class MessageServiceImpl implements MessageService {
 			if (messagesForUser.isEmpty()) {
 				return Response.status(Response.Status.NOT_FOUND).entity("No messages found for the user.").build();
 			}
-			
+
 			return Response.ok(messagesForUser).build();
-			
+
 		} catch (SQLException e) {
 
 			e.printStackTrace();
