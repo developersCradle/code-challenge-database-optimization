@@ -3,13 +3,19 @@ package fi.invian.codingassignment.pojos;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+
 public class MessagePojo {
         
 		private int messagePojoId;
+		@NotBlank
 		private String title;
+		@NotBlank
         private String body;
         private Timestamp sentAt;
+        @NotBlank
         private int senderId;
+        @NotBlank
         private List<Integer> receiverIds; 
 
         public MessagePojo(int messagePojoId, String title, String body, Timestamp sentAt, int senderId,

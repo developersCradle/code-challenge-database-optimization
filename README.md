@@ -1,21 +1,31 @@
 - [ ] Add come caching
 - [ ] Test batteries, for heavy data operations
 
+# Response Format
+
+ This approach allows for concise and expressive code when building responses for RESTful endpoints with proper status code. This API will return in following format: 
+
+```json
+Status: Message of occurance
+```
+
 # MessageResource
 
-This resource is responsible for handling messages in the system.
+`MessageResource` is responsible for handling messages in the system.
 
-# Get Messages for User Inbox
+## Get Messages for User Inbox
 
 This endpoint retrieves messages for a specified user's inbox.
 
 ### Endpoint
 
-`GET /messages/{userId}/inbox`
+- **Path:** `/messages/{userId}/inbox`
+- **HTTP Method:** GET
+- **Produces:** `application/json`
 
 ### Parameters
 
-- **userId** (Path Parameter) - The unique identifier of the user.
+- **userId** - An integer representing the ID of the user for whom messages are to be retrieved.
 
 ### Response
 
@@ -45,12 +55,11 @@ Returns a list of messages from the inbox of the user.
 
 > Not Found (HTTP Status: 404 Not Found)
 
-Returns an error message when no messages are found for the specified user.
+Returns an error message when no messages are found for the specified user or User not found from the system.
 
 ```json
-
 {
-  "error": "No messages found for the user."
+  "Not Found: User not found from the system." or "Not Found: No messages found for the user."
 }
 ```
 
@@ -59,9 +68,8 @@ Returns an error message when no messages are found for the specified user.
 Returns an error message for any internal server error during message retrieval.
 
 ```json
-
 {
-  "error": "Error retrieving messages for the user."
+  "Internal Server Error: Error retrieving messages for the user."
 }
 ```
 
@@ -79,17 +87,22 @@ This endpoint sends a new message in the system.
 - **Path:** `/messages/send`
 - **HTTP Method:** POST
 - **Consumes:** `application/json`
+- **Produces:** `application/json`
 
 #### Request Body (JSON Example)
 
 ```json
 {
-  "senderId": 1,
-  "body": "Some Body",
-  "title": "Some Title",
-  "receiverIds": [1, 2, 3, 4, 5]
+  "title": "Message Title",
+  "body": "Message Body",
+  "senderId": 123,
+  "receiverIds": [456, 789]
 }
 ```
+
+## Constraints
+
+- The `title`, `body`, `senderId`, and `receiverIds` fields are required and must not be blank or empty.
 
 #### Response
 
@@ -99,7 +112,18 @@ Returns a success message when the message is sent successfully.
 
 ```json
 {
-  "message": "Created: The message was sent successfully."
+  "Created: The message was sent successfully."
+}
+
+```
+
+> HTTP Status: 404 Not Found
+
+An issue occurred, and the record conflicts with the one in the database.
+
+```json
+{
+  "Not Found: Sender not found from the system."
 }
 
 ```
@@ -110,7 +134,7 @@ An issue occurred, and the record conflicts with the one in the database.
 
 ```json
 {
-  "error": "Conflict: The record conflicts with the one in the database."
+  "Conflict: The record conflicting with record on the database."
 }
 
 ```
@@ -121,7 +145,7 @@ Error message when there is a unique constraint violation or SQL error.
 
 ```json
 {
-    "error": "Conflict: Unique constraint violation or SQL error."
+  "Internal Server Error: Unique constraint violation or SQL error"
 }
 
 ```
@@ -133,8 +157,13 @@ Rollbacks are employed in case of errors to ensure that the database remains in 
 ### Example Usage
 
 ```
-curl -X POST -H "Content-Type: application/json" -d '{"senderId":1,"body":"Some Body","title":"Some Title","receiverIds":[1,2,3,4,5]}' http://localhost:8080/messages/send
+curl -X POST   -H "Content-Type: application/json"   -d '{"Invian": "Hello from deadlines", "body": "This should have done before 1 week, but school and other job happened", "senderId": 1, "receiverIds": [456, 789]}' http://localhost:8080/messages/send
+
 ```
+
+# StatisticsResource
+
+`StatisticsResource` is responsible for handling statistics related reports.
 
 
 <hr>

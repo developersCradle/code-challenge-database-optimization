@@ -34,14 +34,14 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 			
 			if (users.isEmpty()) {
-				return Response.status(Response.Status.NOT_FOUND).entity("No top users were found.").build();
+				return Response.status(Response.Status.NOT_FOUND).entity("Not Found: No top users were found.").build();
 			}
 			
 			return Response.ok(users).build();
 		}
 		catch (Exception e) {
 			
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal server error").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal Server Error: Internal server error").build();
         }
 	}
 }
