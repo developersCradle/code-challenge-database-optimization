@@ -1,42 +1,53 @@
 package fi.invian.codingassignment.pojos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserPojo {
-	
-    private int userPojoId;
-    private String name;
 
-  
-    public UserPojo() {
-    }
+	private int userId;
+	private String name;
+	private int count;
 
-    public UserPojo(String name) {
-        this.name = name;
-    }
+	public UserPojo() {
+	}
 
-    public UserPojo(int userPojoId, String name) {
- 		this.userPojoId = userPojoId;
- 		this.name = name;
- 	}
+	public UserPojo(String name) {
+		this.name = name;
+	}
 
-    public int getUserId() {
-        return userPojoId;
-    }
+	public UserPojo(int userId, int count) {
+		this.userId = userId;
+		this.count = count;
+	}
 
-    public void setUserId(int userId) {
-        this.userPojoId = userId;
-    }
+	public int getUserId() {
+		return userId;
+	}
 
-    public String getName() {
-        return name;
-    }
- 
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
 	public void setName(String name) {
-        this.name = name;
-    }
-	
-	   @Override
-		public String toString() {
-			return "UserPojo [userPojoId=" + userPojoId + ", name=" + name + "]";
-		}
+		this.name = name;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	@Override
+	public String toString() {
+		return "UserPojo [userPojoId=" + userId + ", name=" + name + "]";
+	}
 
 }

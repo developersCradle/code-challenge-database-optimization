@@ -165,7 +165,27 @@ curl -X POST   -H "Content-Type: application/json"   -d '{"Invian": "Hello from 
 
 `StatisticsResource` is responsible for handling statistics related reports.
 
+## Method
 
+### Get Top Users with Message Count
+
+#### Endpoint
+
+- **Method**: GET
+- **Path**: `/statistics/top-users`
+
+
+#### Response
+
+- **Status**: 200 OK - Successful retrieval of top users with message count.
+- **Status**: 404 Not Found - No top users found.
+- **Status**: 500 Internal Server Error - Internal server error during processing.
+
+#### Example
+
+```http
+GET /statistics/top-users
+```
 <hr>
 
 # Requirements
