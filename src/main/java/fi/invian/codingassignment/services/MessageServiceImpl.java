@@ -11,19 +11,22 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fi.invian.codingassignment.app.DatabaseConnection;
 import fi.invian.codingassignment.pojos.MessagePojo;
 
 public class MessageServiceImpl implements MessageService {
 
+	private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
+	
 	@Override
 	public Response sendNewMessage(MessagePojo message) throws SQLException {
 
-		/*
-		 * TODO HEIKKI(Optimization, Logging) Test will log4j asynchronous logging work better or not. Other joice is to use java.util.logging
-		 */
-		System.out.println("Trying to send following message " + message);
-
+	
+        logger.debug("Trying to send following message " + message);
+        
 		Connection connection = null;
 
 		try {
@@ -64,21 +67,21 @@ public class MessageServiceImpl implements MessageService {
 						 * TODO HEIKKI(Bug, Query) When there is no  Receivers, system sends Message  even if there were no receivers
 						 */
 						if (!userExistsInDb(receaver_id, connection)) {
-							System.out.println("Receiver with user_id " + receaver_id + " does not exist. Skipping this user_id for sending message");
+							logger.warn("Receiver with user_id " + receaver_id + " does not exist. Skipping this user_id for sending message");
 							continue;
 						}
 						
 						String sqlForRecipientsTable = "INSERT INTO Recipients (message_id, receiver_id) VALUES (?, ?)"; // For
-																															// Recipients
-						System.out.println("Sending message with message_id is: " + message_id);
-						System.out.println("Sending message with receaver_id is: " + receaver_id);
+						
+						logger.info("Sending message with receaver_id is: " + receaver_id);
+						logger.info("Sending message with message_id is: " + message_id);
 
 						PreparedStatement preparedStatement = connection.prepareStatement(sqlForRecipientsTable);
 						preparedStatement.setInt(1, message_id);
 						preparedStatement.setInt(2, receaver_id);
 						int executeUpdate = preparedStatement.executeUpdate();
 
-						System.out.println("Insert was " + (executeUpdate > 0 ? "successful" : "not successful"));
+						logger.info("Insert was " + (executeUpdate > 0 ? "successful" : "not successful"));
 					}
 				} else {
 
@@ -92,7 +95,7 @@ public class MessageServiceImpl implements MessageService {
 
 				connection.commit();
 				
-				System.out.println("Message created");
+				logger.info("Message created");
 				
 				// Following The choice of the message content in the entity depends on the design and requirements of your API. 
 				return Response.status(Response.Status.CREATED).type(MediaType.APPLICATION_JSON).entity("Created: The message was sent successfully.")
@@ -154,7 +157,7 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public Response getMessagesForAdressedUser(int userId) throws SQLException {
 		
-		System.out.println("Trying to get messages for " + userId);
+		logger.info("Trying to get messages for " + userId);
 		
 		String sqlForGettingMessagesForUser = "SELECT * FROM Messages JOIN Recipients ON Messages.message_id = Recipients.message_id  WHERE Recipients.receiver_id = ?";
 
