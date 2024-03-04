@@ -19,9 +19,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 	
-	
-//	Statistics endpoint: Top 10 users (by sent message count) sorted by decreasing sent
-//	message count for the last 30 days
+	/*
+	Statistics endpoint: Top 10 users (by sent message count) sorted by decreasing sent
+	message count for the last 30 days
+	*/
 	@Override
 	public Response getTopUsersWithMessageCount(int numberOfUsers, int daysAgo, String sortDirection) throws SQLException {
 

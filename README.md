@@ -1,5 +1,3 @@
-- [ ] Add come caching
-- [ ] Test batteries, for heavy data operations
 
 # Response Format
 
@@ -173,7 +171,6 @@ curl -X POST   -H "Content-Type: application/json"   -d '{"Invian": "Hello from 
 
 - **Method**: GET
 - **Path**: `/statistics/top-users`
-
 
 #### Response
 

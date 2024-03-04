@@ -21,6 +21,9 @@ public class MessageServiceImpl implements MessageService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 	
+	/*
+	 * Send new message
+	 */
 	@Override
 	public Response sendNewMessage(MessagePojo message) throws SQLException {
 
@@ -153,6 +156,10 @@ public class MessageServiceImpl implements MessageService {
 		
 		return false;
 	}
+	
+	/*
+	 * Read messages addressed to a specified user
+	 */
 
 	@Override
 	public Response getMessagesForAdressedUser(int userId) throws SQLException {
