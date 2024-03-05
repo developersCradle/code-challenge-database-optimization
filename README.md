@@ -29,7 +29,7 @@ This endpoint retrieves messages for a specified user's inbox.
 
 > Success (HTTP Status: 200 OK)
 
-Returns a list of messages from the inbox of the user.
+Returns a list of messages from the inbox of the user. `SentAt` in fomat **yyyy-MM-dd**
 
 #### Request Body (JSON Example)
 
@@ -38,13 +38,13 @@ Returns a list of messages from the inbox of the user.
   {
     "title": "Message Title 1",
     "body": "Message Body 1",
-    "sentAt": "2024-02-25T14:30:00",
+    "sentAt": "2024-02-25",
     "senderId": 2
   },
   {
     "title": "Message Title 2",
     "body": "Message Body 2",
-    "sentAt": "2024-02-26T10:15:00",
+    "sentAt": "2024-02-26",
     "senderId": 3
   },
   // ... other messages

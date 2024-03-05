@@ -28,7 +28,7 @@ public class MessageServiceImpl implements MessageService {
 	public Response sendNewMessage(MessagePojo message) throws SQLException {
 
 	
-        logger.debug("Trying to send following message " + message);
+        logger.debug(String.format("Trying to send following message: %s", message));
         
 		Connection connection = null;
 
@@ -63,28 +63,28 @@ public class MessageServiceImpl implements MessageService {
 																// important. TODO MINOR: If rollbacks has been
 																// happened, db id is still counting it for next id.
 					
-					for (Integer receaver_id : message.getReceiverIds()) {
+					for (Integer receiver_id  : message.getReceiverIds()) {
 
 						/*
 						 * TODO HEIKKI(Optimization, Query) Check the existence of multiple users in a single query and return the list of valid ones. Should insert to Recipients be done as one big, not individual inserts?
 						 * TODO HEIKKI(Bug, Query) When there is no  Receivers, system sends Message  even if there were no receivers
 						 */
-						if (!userExistsInDb(receaver_id, connection)) {
-							logger.warn("Receiver with user_id " + receaver_id + " does not exist. Skipping this user_id for sending message");
+						if (!userExistsInDb(receiver_id, connection)) {
+							logger.warn(String.format("Receiver with user_id %s does not exist. Skipping this user_id for sending message", receiver_id));
 							continue;
 						}
 						
-						String sqlForRecipientsTable = "INSERT INTO Recipients (message_id, receiver_id) VALUES (?, ?)"; // For
+						String sqlForRecipientsTable = "INSERT INTO Recipients (message_id, receiver_id) VALUES (?, ?)"; // For Recipients Table
 						
-						logger.info("Sending message with receaver_id is: " + receaver_id);
-						logger.info("Sending message with message_id is: " + message_id);
+						logger.info(String.format("Sending message with receiver_id is: %s", receiver_id));
+						logger.info(String.format("Sending message with message_id is: %s", message_id));
 
 						PreparedStatement preparedStatement = connection.prepareStatement(sqlForRecipientsTable);
 						preparedStatement.setInt(1, message_id);
-						preparedStatement.setInt(2, receaver_id);
+						preparedStatement.setInt(2, receiver_id);
 						int executeUpdate = preparedStatement.executeUpdate();
 
-						logger.info("Insert was " + (executeUpdate > 0 ? "successful" : "not successful"));
+						logger.info(String.format("Insert was %s", (executeUpdate > 0 ? "successful" : "not successful")));
 					}
 				} else {
 
@@ -100,7 +100,6 @@ public class MessageServiceImpl implements MessageService {
 				
 				logger.info("Message created");
 				
-				// Following The choice of the message content in the entity depends on the design and requirements of your API. 
 				return Response.status(Response.Status.CREATED).type(MediaType.APPLICATION_JSON).entity("Created: The message was sent successfully.")
 						.build();
 			} else {
@@ -164,10 +163,13 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public Response getMessagesForAdressedUser(int userId) throws SQLException {
 		
-		logger.info("Trying to get messages for " + userId);
+		logger.info(String.format("Trying to get messages for %s", userId));
 		
+		/*
+		 * TODO HEIKKI(Optimization, Query) Avoid SELECT * when not necessary. Select only what u need. 
+		 */
 		String sqlForGettingMessagesForUser = "SELECT * FROM Messages JOIN Recipients ON Messages.message_id = Recipients.message_id  WHERE Recipients.receiver_id = ?";
-
+		//TODO do we need message ID when returning???
 		try (Connection connection = DatabaseConnection.getConnection()) {
 
 			if (!userExistsInDb(userId, connection)) { //Nesting connection not recommended, sending connection.

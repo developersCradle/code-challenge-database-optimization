@@ -47,7 +47,7 @@ public class UserPojo {
 
 	@Override
 	public String toString() {
-		return "UserPojo [userPojoId=" + userId + ", name=" + name + "]";
+		return "UserPojo [userId=" + userId + ", name=" + name + "]";
 	}
 
 }

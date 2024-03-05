@@ -17,7 +17,7 @@ import fi.invian.codingassignment.pojos.UserPojo;
 
 public class StatisticsServiceImpl implements StatisticsService {
 
-	private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(StatisticsServiceImpl.class);
 	
 	/*
 	Statistics endpoint: Top 10 users (by sent message count) sorted by decreasing sent
@@ -26,7 +26,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 	@Override
 	public Response getTopUsersWithMessageCount(int numberOfUsers, int daysAgo, String sortDirection) throws SQLException {
 
-		logger.info("Getting top " + numberOfUsers + " users. From " + daysAgo + " ago, with " + sortDirection );
+		logger.info(String.format("Getting top %d users. From %d days ago, with %s sort direction.", numberOfUsers, daysAgo, sortDirection));
 		
 	    String sqlForGettingTopUsersWithMessageCount = "SELECT sender_id as sending_user, COUNT(*) as message_count " +
 	                "FROM Messages " +
