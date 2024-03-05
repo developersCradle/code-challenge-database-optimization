@@ -1,5 +1,5 @@
 
--- Version 2
+-- Version 3
 
 -- Models Users
 CREATE TABLE Users (
@@ -12,7 +12,7 @@ CREATE TABLE Messages (
     message_id INT AUTO_INCREMENT PRIMARY KEY,
     title TEXT NOT NULL,
     body TEXT NOT NULL,
-    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    sent_at DATE DEFAULT (CURRENT_DATE),
     sender_id INT,
     FOREIGN KEY (sender_id) REFERENCES Users(user_id)
 );
@@ -32,10 +32,7 @@ CREATE TABLE Recipients (
 CREATE INDEX idx_receiver_id ON Recipients(receiver_id);
 
 
-
 -- DUMMY DATA - START
-
--- Start - For Users Tables
 
 -- Some data for Users, batch inserts
 -- INSERT INTO Users (name)
@@ -56,7 +53,7 @@ CREATE INDEX idx_receiver_id ON Recipients(receiver_id);
 
 DELIMITER //
 
-CREATE PROCEDURE addingMultipleUserForBenchmark(IN num_users INT)
+CREATE PROCEDURE addingMultipleUsersForBenchmark(IN num_users INT)
 
 BEGIN
     DECLARE i INT DEFAULT 1;
@@ -70,7 +67,7 @@ END //
 DELIMITER ;
 
 -- Making 1000 users
-CALL addingMultipleUserForBenchmark(1000);
+CALL addingMultipleUsersForBenchmark(1000);
 
 
 DELIMITER //
@@ -102,18 +99,22 @@ CALL addingMultipleMessagesForBenchmark(1000);
 
 
 
--- Sample data for messages
-INSERT INTO Messages SET title = 'Hello', body = 'Hi there!', sender_id = 1;
-INSERT INTO Messages SET title = 'Meeting Tomorrow', body = 'Don\'t forget the meeting tomorrow at 10 AM.', sender_id = 1;
-INSERT INTO Messages SET title = 'Important Update', body = 'Please review the document attached for the latest update.', sender_id = 1;
+-- Sample data for messages with CURRENT_DATE
 
--- Same, but with some random timestamp
-
-INSERT INTO Messages SET title = 'Joku juttu', body = 'Fast. We need to speed up.', sent_at = '2020-02-25 14:30:00', sender_id = 2;
-INSERT INTO Messages SET title = 'Joku raportti', body = 'Please submit Invians test by Tuesday.', sent_at = '2020-02-24 09:45:00', sender_id = 3;
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 1', 'Here is your daily update. 1', CURRENT_DATE, 2);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 2', 'Here is your daily update. 2', CURRENT_DATE, 2);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 3', 'Here is your daily update. 3', CURRENT_DATE, 2);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 4', 'Here is your daily update. 4', CURRENT_DATE, 2);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 5', 'Here is your daily update. 5', CURRENT_DATE, 2);
 
 
--- Inserting recipients for sample messages
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Meeting Reminder', 'Don''t forget the meeting tomorrow!', '2022-03-05', 1);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Meeting Reminder', 'Don''t forget the meeting tomorrow!', '2022-03-05', 3);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Meeting Reminder', 'Don''t forget the meeting tomorrow!', '2022-03-05', 3);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Meeting Reminder', 'Don''t forget the meeting tomorrow!', '2022-03-05', 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Meeting Reminder', 'Don''t forget the meeting tomorrow!', '2022-03-05', 5);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Meeting Reminder', 'Don''t forget the meeting tomorrow!', '2022-03-05', 6);
+
 
 -- TODO HEIKKI(Performance, SQL) For large ammount of data. Consider dropping insert and after insert re-create index for tables
 
@@ -131,6 +132,5 @@ INSERT INTO Recipients SET message_id = 3, receiver_id = 4;
 INSERT INTO Recipients SET message_id = 4, receiver_id = 5;
 INSERT INTO Recipients SET message_id = 5, receiver_id = 6;
 
-INSERT INTO Recipients SET message_id = 3, receiver_id = 1;
 INSERT INTO Recipients SET message_id = 4, receiver_id = 2;
 INSERT INTO Recipients SET message_id = 5, receiver_id = 4;

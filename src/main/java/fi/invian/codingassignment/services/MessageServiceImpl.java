@@ -138,7 +138,7 @@ public class MessageServiceImpl implements MessageService {
 			- COUNT(*) to check existence is less efficient than using EXISTS or IN because it may need to count all matching rows.
 		Method 4: Using FETCH with SELECT
 	 */
-	private boolean userExistsInDb(int user_id, Connection connection) throws SQLException {// Nesting connection not
+	private boolean userExistsInDb(int user_id, Connection connection) throws SQLException {
 		
 		String sqlForUsersTable = "SELECT EXISTS (SELECT 1 FROM Users WHERE user_id = ?) AS user_exists";
 
@@ -183,8 +183,13 @@ public class MessageServiceImpl implements MessageService {
 			List<MessagePojo> messagesForUser = new ArrayList<>();
 
 			while (resultSet.next()) {
-				MessagePojo message = new MessagePojo(resultSet.getString("title"), resultSet.getString("body"),
-						resultSet.getTimestamp("sent_at"), resultSet.getInt("sender_id"));
+				MessagePojo message = new MessagePojo();
+				
+				message.setTitle(resultSet.getString("title"));
+				message.setBody(resultSet.getString("body"));
+				message.setSenderId(resultSet.getInt("sender_id"));
+				message.setSentAt(resultSet.getDate("sent_at"));
+
 				messagesForUser.add(message);
 			}
 
