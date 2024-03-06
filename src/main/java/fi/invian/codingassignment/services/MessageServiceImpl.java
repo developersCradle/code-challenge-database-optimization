@@ -69,7 +69,7 @@ public class MessageServiceImpl implements MessageService {
 						 * TODO HEIKKI(Optimization, Query) Check the existence of multiple users in a single query and return the list of valid ones. Should insert to Recipients be done as one big, not individual inserts?
 						 * TODO HEIKKI(Bug, Query) When there is no  Receivers, system sends Message  even if there were no receivers
 						 */
-						if (!userExistsInDb(receiver_id, connection)) {
+						if (!userExistsInDb(receiver_id, connection)) { //TODO HEIKKI(Validate, user checking) Receaver users should be check and also validated. Max 5 
 							logger.warn(String.format("Receiver with user_id %s does not exist. Skipping this user_id for sending message", receiver_id));
 							continue;
 						}

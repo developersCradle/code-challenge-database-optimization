@@ -3,7 +3,7 @@
 
  This approach allows for concise and expressive code when building responses for RESTful endpoints with proper status code. This API will return in following format: 
 
-```json
+```http
 Status: Message of occurance
 ```
 
@@ -29,7 +29,7 @@ This endpoint retrieves messages for a specified user's inbox.
 
 > Success (HTTP Status: 200 OK)
 
-Returns a list of messages from the inbox of the user. `SentAt` in fomat **yyyy-MM-dd**
+Returns a list of messages from the inbox of the user. `SentAt` in format **yyyy-MM-dd**
 
 #### Request Body (JSON Example)
 
@@ -73,7 +73,7 @@ Returns an error message for any internal server error during message retrieval.
 
 ### Example Usage
 
-```
+```http
 curl -X GET http://localhost:8080/messages/1/inbox
 ```
 
@@ -154,7 +154,7 @@ Rollbacks are employed in case of errors to ensure that the database remains in 
 
 ### Example Usage
 
-```
+```http
 curl -X POST   -H "Content-Type: application/json"   -d '{"Invian": "Hello from deadlines", "body": "This should have done before 1 week, but school and other job happened", "senderId": 1, "receiverIds": [456, 789]}' http://localhost:8080/messages/send
 
 ```

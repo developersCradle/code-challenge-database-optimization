@@ -16,6 +16,9 @@ import fi.invian.codingassignment.services.StatisticsServiceImpl;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 
+/*
+ * TODO HEIKKI(Cache, Optimization) Some cache would be mby good, since app don't have much mutation operations. Could query old ones forom cache
+ */
 public class BackendApplication {
     public static void main(String[] args) throws Exception {
         URI baseUri = UriBuilder.fromUri("http://127.0.0.1/").port(8080).build();

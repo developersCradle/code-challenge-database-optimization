@@ -6,16 +6,16 @@
 -- Models Users
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
-    name TEXT NOT NULL
+    name TEXT NOT NULL -- NOT NULL, querying might be more efficient. TODO HEIKKI(Database, size) change possibility to VARCHAR
 );
 
 -- Models Messages
 CREATE TABLE Messages (
     message_id INT AUTO_INCREMENT PRIMARY KEY,
-    title TEXT NOT NULL, -- Message always needs title
-    body TEXT NOT NULL, -- Message always needs body
+    title TEXT NOT NULL, -- Message always needs title. NOT NULL, querying might be more efficient.
+    body TEXT NOT NULL, -- Message always needs body. NOT NULL, querying might be more efficient.
     sent_at DATE DEFAULT (CURRENT_DATE),
-    sender_id INT NOT NULL, -- Message always needs sender
+    sender_id INT NOT NULL, -- Message always needs sender. NOT NULL, querying might be more efficient.
     FOREIGN KEY (sender_id) REFERENCES Users(user_id) -- In MariaDB, index is automatically created on the columns involved in the foreign key relationship.
 );
 
@@ -31,7 +31,7 @@ CREATE TABLE Recipients (
 
 
 -- We read query Recipients for calculations, so we index it for now.
-CREATE INDEX idx_receiver_id ON Recipients(receiver_id);
+CREATE INDEX idx_receiver_id ON Recipients(receiver_id); -- Not needed 
 
 
 
@@ -52,7 +52,7 @@ CREATE INDEX idx_receiver_id ON Recipients(receiver_id);
 
 
 -- TODO HEIKKI(Performance, SQL) If uses index. For large amount of data. Consider dropping insert and after insert re-create index for tables. 
--- TODO HEIKKI(SQL, SQL) Verify this works also  in MariaDB. Works in MySQL
+-- TODO HEIKKI(SQL, SQL) Verify this works also  in MariaDB. Works in MySQL. MariaDB is a fork of MySQL, so it should
  
 DELIMITER //
 
@@ -69,7 +69,7 @@ END //
 
 DELIMITER ;
 
--- Making 1000 users
+-- Making 1000 Users
 CALL addingMultipleUsersForBenchmark(1000);
 
 
@@ -78,13 +78,13 @@ DELIMITER //
 CREATE PROCEDURE addingMultipleMessagesForBenchmark(IN num_messages INT)
 BEGIN
 
-    DECLARE i INT DEFAULT 0;
+    DECLARE i INT DEFAULT 1;
 
     WHILE i < num_messages DO
         INSERT INTO Messages (title, body, sender_id)
         VALUES (
-            CONCAT('Message Title ', i + 1),
-            CONCAT('Message Body ', i + 1),
+            CONCAT('Message Title ', i),
+            CONCAT('Message Body ', i),
             1  -- Replace with the actual sender_id
         );
 
@@ -94,11 +94,34 @@ END //
 
 DELIMITER ;
 
-CALL addingMultipleMessagesForBenchmark(1000);
+-- Making 1000 Messages
+-- CALL addingMultipleMessagesForBenchmark(1000);
+
+
+-- DELIMITER //
+
+-- CREATE PROCEDURE addingMultipleRecipientsForBenchmark(IN num_recipients INT)
+-- BEGIN
+
+--     DECLARE i INT DEFAULT 1;
+
+--     WHILE i < num_recipients DO
+
+--         INSERT INTO Recipients (message_id, receiver_id)
+--         VALUES (i,i);
+--         SET i = i + 1;
+--         -- TODO HEIKKI(Database, dummy data) Get this working also, for now use basic inserts for test data
+--     END WHILE;
+-- END //
+
+-- DELIMITER ;
+
+
+-- Making 1000 Recipients
+-- CALL addingMultipleRecipientsForBenchmark(1000);
+
 
 -- DUMMY DATA - STOP
-
-
 
 
 
@@ -109,6 +132,11 @@ INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 2',
 INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 3', 'Here is your daily update. 3', CURRENT_DATE, 2);
 INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 4', 'Here is your daily update. 4', CURRENT_DATE, 2);
 INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 5', 'Here is your daily update. 5', CURRENT_DATE, 2);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 5', 'Here is your daily update. 5', CURRENT_DATE, 2);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 5', 'Here is your daily update. 5', CURRENT_DATE, 2);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 5', 'Here is your daily update. 5', CURRENT_DATE, 2);
+
+
 
 
 INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Meeting Reminder', 'Don''t forget the meeting tomorrow!', '2022-03-05', 1);
@@ -117,6 +145,50 @@ INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Meeting Reminder
 INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Meeting Reminder', 'Don''t forget the meeting tomorrow!', '2022-03-05', 4);
 INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Meeting Reminder', 'Don''t forget the meeting tomorrow!', '2022-03-05', 5);
 INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Meeting Reminder', 'Don''t forget the meeting tomorrow!', '2022-03-05', 6);
+
+
+-- Inserting before 40 days
+
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+INSERT INTO Messages (title, body, sent_at, sender_id) VALUES ('Daily Update 40', CONCAT('Here is your daily update. ', 40), CURRENT_DATE - INTERVAL 40 DAY, 4);
+
 
 
 -- TODO HEIKKI(Performance, SQL) For large amount of data. Consider dropping insert and after insert re-create index for tables

@@ -34,6 +34,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 	                "GROUP BY sender_id " +
 	                "ORDER BY message_count " + sortDirection + " " + // Add the sorting direction dynamically
 	                "LIMIT ?;";
+	    //TODO HEIKKI(Security, sqlinjection) mby fix sql injection
 	  	
 	    try (Connection connection = DatabaseConnection.getConnection()) {
 	  		

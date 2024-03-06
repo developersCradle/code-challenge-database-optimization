@@ -55,7 +55,7 @@ public class AppTest extends JerseyTest {
 		// When - START
 		Response response = target("/messages/send").request()
 				.post(Entity.entity(testMessage, MediaType.APPLICATION_JSON));
-		// When - START
+		// When - END
 
 		// Then - START
 		assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
