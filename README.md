@@ -1,10 +1,14 @@
 
+<p align="center">
+  <img id="domaCare" src="domaCareSymbol.png" alt="alt text" width="400"/>
+</p>
+
 # Response Format
 
  This approach allows for concise and expressive code when building responses for RESTful endpoints with proper status code. This API will return in following format: 
 
 ```http
-Status: Message of occurance
+Status: Message of occurrence
 ```
 
 # MessageResource

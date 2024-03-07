@@ -6,7 +6,8 @@
 -- Models Users
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
-    name TEXT NOT NULL -- NOT NULL, querying might be more efficient. TODO HEIKKI(Database, size) change possibility to VARCHAR
+    name VARCHAR(35) NOT NULL -- NOT NULL, querying might be more efficient. VARCHAR is for relatively small texts and if you want to perform efficient searches and indexing.
+    -- VARCHAR(35) We assume here to handle only finnish names. Longest known Finnish name is "Äteritsiputeritsipuolilautatsijänkä" With 35 letters, therefore VARCHAR(35).
 );
 
 -- Models Messages
@@ -31,7 +32,7 @@ CREATE TABLE Recipients (
 
 
 -- We read query Recipients for calculations, so we index it for now.
-CREATE INDEX idx_receiver_id ON Recipients(receiver_id); -- Not needed 
+-- CREATE INDEX idx_receiver_id ON Recipients(receiver_id); -- Not needed 
 
 
 
