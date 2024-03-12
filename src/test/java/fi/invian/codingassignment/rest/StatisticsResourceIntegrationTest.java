@@ -1,8 +1,6 @@
-package fi.invian;
+package fi.invian.codingassignment.rest;
 
-import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.Date;
 
 import org.junit.Test;
 
@@ -26,7 +24,16 @@ import org.glassfish.jersey.test.JerseyTest;
 /*
  * TODO HEIKKI(Testing, Software quality) Connect or add data before testing. Test works, but need to insert data to container
  */
-public class AppTest extends JerseyTest {
+
+/*
+ * TODO HEIKKI(Testing, Performance testing) Junit Parameterized testing to insert multiple lines to db would one routine to go.
+ */
+
+
+/*
+ * Integration tests for StatisticsResource
+ */
+public class StatisticsResourceIntegrationTest extends JerseyTest {
 
 	@Override
 	protected Application configure() {

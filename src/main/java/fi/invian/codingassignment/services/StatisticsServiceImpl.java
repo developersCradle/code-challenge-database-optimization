@@ -20,7 +20,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 	private static final Logger logger = LoggerFactory.getLogger(StatisticsServiceImpl.class);
 	
 	/*
-	Statistics endpoint: Top 10 users (by sent message count) sorted by decreasing sent
+	Get Top 10 users (by sent message count) sorted by decreasing sent
 	message count for the last 30 days
 	*/
 	@Override
