@@ -69,6 +69,11 @@
 			<artifactId>jersey-test-framework-provider-grizzly2</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- We are using this type and version of validation -->
+		<dependency>
+			<groupId>org.glassfish.jersey.ext</groupId>
+			<artifactId>jersey-bean-validation</artifactId>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>

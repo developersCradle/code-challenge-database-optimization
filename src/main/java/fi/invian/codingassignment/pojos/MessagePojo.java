@@ -3,7 +3,8 @@ package fi.invian.codingassignment.pojos;
 import java.sql.Date;
 import java.util.List;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -11,19 +12,21 @@ public class MessagePojo {
 
 	private int messageId;
 
-	@NotBlank
+	@NotEmpty(message = "Message should contain title")
 	private String title;
-	@NotBlank
+	@NotEmpty(message = "Message should contain body")
 	private String body;
+	@NotEmpty(message = "Message should have sender")
+	private int senderId;
+
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date sentAt;
-	@NotBlank
-	private int senderId;
-	@NotBlank
+	
+
+	@Size(min = 1, max = 5, message = "Message should have min 1 and maxium 5 recipients")
 	private List<Integer> receiverIds;
 
-	public MessagePojo(int messageId, String title, String body, Date sentAt, int senderId,
-			List<Integer> receiverIds) {
+	public MessagePojo(int messageId, String title, String body, Date sentAt, int senderId, List<Integer> receiverIds) {
 		this.messageId = messageId;
 		this.title = title;
 		this.body = body;
@@ -68,7 +71,8 @@ public class MessagePojo {
 	}
 
 	/*
-	 * TODO minor bug. Date is fomatted in JSON 00 based. Meaning, 01 month will be one less
+	 * TODO minor bug. Date is fomatted in JSON 00 based. Meaning, 01 month will be
+	 * one less
 	 */
 	public String getSentAt() {
 //		return sentAt; Figure this one out
@@ -97,8 +101,8 @@ public class MessagePojo {
 
 	@Override
 	public String toString() {
-		return "MessagePojo [messageId=" + messageId + ", title=" + title + ", body=" + body + ", sentAt="
-				+ sentAt + ", senderId=" + senderId + ", receiverIds=" + receiverIds + "]";
+		return "MessagePojo [messageId=" + messageId + ", title=" + title + ", body=" + body + ", sentAt=" + sentAt
+				+ ", senderId=" + senderId + ", receiverIds=" + receiverIds + "]";
 	}
 
 }

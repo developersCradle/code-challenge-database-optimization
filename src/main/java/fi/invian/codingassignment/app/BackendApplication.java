@@ -6,6 +6,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.jetty.JettyHttpContainerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.servlet.ServletContainer;
 
 import fi.invian.codingassignment.services.MessageService;
@@ -28,15 +29,29 @@ public class BackendApplication {
         context.setContextPath("/*");
 		ServletContainer jersey = new ServletContainer(new ResourceConfig() {
 			{
+				
+				/*
+				 * Jersey's Dependency Injection (DI) binds implementations to interfaces.
+				 * Usually done using Jersey's AbstractBinder class to define bindings, like in here.
+				 */
 				register(new AbstractBinder() {
 					@Override
 					protected void configure() {
 						bind(StatisticsServiceImpl.class).to(StatisticsService.class);
 						bind(MessageServiceImpl.class).to(MessageService.class);
+						 						
 					}
 				});
-
+				
+				/*
+				In Jersey, the packages method is used to specify the packages that contain your resource classes so that
+				Jersey can automatically scan and register them. So, points where resources are
+				*/
 				packages("fi.invian.codingassignment.rest");
+				/*
+				 Jersey should send validation errors in the response when they occur during request processing. For Jersey bean validation
+				 */
+		        property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
 			}
 		});
 

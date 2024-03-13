@@ -106,6 +106,9 @@ This endpoint sends a new message in the system.
 
 - The `title`, `body`, `senderId`, and `receiverIds` fields are required and must not be blank or empty.
 
+- `receiverIds` should have **minimum** number of recipients: 1 and **maximum** number of recipients: 5
+
+
 #### Response
 
 > HTTP Status: 201 Created
