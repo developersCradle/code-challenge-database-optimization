@@ -3,6 +3,10 @@
   <img id="domaCare" src="domaCareSymbol.png" alt="alt text" width="400"/>
 </p>
 
+# Cache Control Directives
+
+The cache control directives are being used with `CacheControl` class provided by JAX-RS. Currently it is under benchmarking to find which scenario fits for this problem. [See more about](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9)
+
 # Response Format
 
  This approach allows for concise and expressive code when building responses for RESTful endpoints with proper status code. This API will return in following format: 
@@ -80,6 +84,7 @@ Returns an error message for any internal server error during message retrieval.
 ```http
 curl -X GET http://localhost:8080/messages/1/inbox
 ```
+
 
 # Send New Message
 

@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -162,6 +163,9 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public Response getMessagesForAdressedUser(int userId) throws SQLException {
+
+        CacheControl cacheControl = new CacheControl();
+        cacheControl.setMaxAge(3600); // TODO HEIKKI(Cache, server-side caching) Think scenario thought, what parameters should use for caching and benchmark this with benchmark tool after get it working
 		
 		logger.info(String.format("Trying to get messages for %s", userId));
 		
@@ -199,7 +203,7 @@ public class MessageServiceImpl implements MessageService {
 				return Response.status(Response.Status.NOT_FOUND).entity("Not Found: No messages found for the user.").build();
 			}
 
-			return Response.ok(messagesForUser).build();
+		        return Response.ok(messagesForUser).cacheControl(cacheControl).build();
 
 		} catch (SQLException e) {
 
