@@ -3,6 +3,35 @@
   <img id="domaCare" src="domaCareSymbol.png" alt="alt text" width="400"/>
 </p>
 
+
+
+
+
+> [!IMPORTANT]
+> Coding assignment
+> Messaging application
+>
+> ● We will provide a project template of standard RESTful web service <br>
+> ● The template is using plain SQL strings since wiring up what we have in the backend would be too much effort for this <br>
+> ● Your task is to create database structure and some simple endpoints for an imaginary messaging application <br>
+> ● Imagine, that the service is used by lots of users, so try to optimize database structure for large volumes of data <br>
+>
+> Requirements: <br>
+> ● User should be able to send messages (like email) to recipients who are other users of the messaging application. <br>
+> ● Message should contain title, message body and timestamp of when it was sent <br>
+> ● Message has a maximum of 5 recipients <br>
+> ● User should have a name <br>
+> Output <br>
+> Database <br>
+> ● CREATE TABLE statements for the database structure in the database sql file <br>
+> ● Optionally test data as INSERT statements in the same file <br>
+> Endpoints implemented in the project template <br>
+> ● Send new message <br>
+> ● Read messages addressed to a specified user <br>
+> ● Statistics endpoint: Top 10 users (by sent message count) sorted by decreasing sent message count for the last 30 days <br>
+
+
+
 # Cache Control Directives
 
 The cache control directives are being used with `CacheControl` class provided by JAX-RS. Currently it is under benchmarking to find which scenario fits for this problem. [See more about](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9)

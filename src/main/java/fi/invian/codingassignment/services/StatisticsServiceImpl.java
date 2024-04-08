@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import fi.invian.codingassignment.app.DatabaseConnection;
 import fi.invian.codingassignment.pojos.UserPojo;
 
@@ -32,13 +33,14 @@ public class StatisticsServiceImpl implements StatisticsService {
 	                "FROM Messages " +
 	                "WHERE sent_at >= CURDATE() - INTERVAL ? DAY " +
 	                "GROUP BY sender_id " +
-	                "ORDER BY message_count " + sortDirection + " " + // Add the sorting direction dynamically
+	                "ORDER BY message_count %s " +  
 	                "LIMIT ?;";
-	    //TODO HEIKKI(Security, sqlinjection) mby fix sql injection
 	  	
 	    try (Connection connection = DatabaseConnection.getConnection()) {
 	  		
-	  		PreparedStatement preparedStatement = connection.prepareStatement(sqlForGettingTopUsersWithMessageCount);
+	    	String formattedQuery = String.format(sqlForGettingTopUsersWithMessageCount, sortDirection);
+	  		PreparedStatement preparedStatement = connection.prepareStatement(formattedQuery);
+
 
 			preparedStatement.setInt(1, daysAgo);
 			preparedStatement.setInt(2, numberOfUsers);
